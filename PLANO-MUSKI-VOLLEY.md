@@ -1,6 +1,6 @@
 # Plano de desenvolvimento do Muski Volley
 
-**Etapa atual:** 0 — acabamento visual do MVP. **Status:** aguardando seu teste.
+**Etapa atual:** 2 — bots e buffs na quadra. **Status:** em implementação.
 
 A meta da versão 1.0 é um jogo de vôlei de praia 2×2 no navegador, com salas privadas pela internet, quatro vagas para humanos ou bots, gameplay baseado em timing, placar, reconexão e revanche. Use a [identidade visual](docs/identidade-visual.md), os [requisitos](docs/requisitos.md) e a [arquitetura](docs/arquitetura.md) como referência.
 
@@ -12,19 +12,19 @@ A meta da versão 1.0 é um jogo de vôlei de praia 2×2 no navegador, com salas
 
 Para abrir o jogo localmente, rode `npm ci` na primeira execução e `npm run dev`. Use `npm run build` e `npm test` para verificar o projeto. O [README](README.md) traz os controles e o preparo do Playwright.
 
-## 0. Acabamento visual do MVP · Aguardando teste
+## 0. Acabamento visual do MVP · Aprovada
 
-**Entrega.** Nuvens com deslocamento discreto, folhagem em primeiro plano sobre as linhas, nomes legíveis em qualquer escala da quadra e botão **Tela cheia** com acesso ao placar e aos controles. A opção de movimento reduzido deixa as nuvens paradas.
+**Entrega.** Nuvens com deslocamento discreto, folhagem em primeiro plano sobre as linhas, nomes legíveis em qualquer escala da quadra e botão **Tela cheia** com acesso ao placar e aos controles. A opção de movimento reduzido deixa as nuvens paradas. A velocidade das nuvens foi aumentada após o primeiro teste.
 
 **Seu teste.** Observe o céu por alguns segundos, confira os nomes e as linhas nos cantos. Comece um treino, entre em tela cheia, saque com `Espaço` e volte pelo botão ou por `Esc`. Ative movimento reduzido em **Configurações** e observe o céu de novo.
 
-## 1. Gameplay completo no treino local · Pendente
+## 1. Gameplay completo no treino local · Aprovada
 
 **Entrega.** Consolidar o motor de simulação de quadra, bola, saltos, rede e contatos com testes reproduzíveis. Completar os três saques, as quatro notas de recepção, o levantamento, a largada do levantador, os ataques `W, W` e `W, S` e os três resultados de bloqueio. Mostrar um sinal de timing, animação e feedback para cada ação. Fechar a regra de 15 pontos com dois de vantagem e a revanche local.
 
-**Seu teste.** Jogue uma partida completa. Compare a dificuldade dos três saques, tente uma recepção boa e uma atrasada, alterne os ataques e experimente bloquear junto à rede. Confira se um passe B impede a largada do levantador e se o placar continua em `15–14`.
+**Seu teste.** Jogue uma partida completa. Na sua vez de sacar, escolha **Normal**, **Flutuante** ou **Viagem**. Nos saques avançados, experimente apertar `Espaço` dentro e fora da janela amarela ou verde do anel. No rally, tente uma recepção boa e uma atrasada, alterne os ataques e experimente bloquear junto à rede. Confira se um passe B impede a largada do levantador. A partida segue em `15–14` e termina em `16–14`, cenário também coberto pelos testes automatizados.
 
-## 2. Bots e buffs na quadra · Pendente
+## 2. Bots e buffs na quadra · Em implementação
 
 **Entrega.** Criar perfis Fácil, Médio, Difícil e Brutal com diferenças de reação, posicionamento, decisão e timing. Adicionar, remover e configurar bots por equipe, além de preencher vagas livres com um botão. Implementar os buffs espelhados de passe, velocidade e salto, desligados por padrão e ajustáveis no lobby. Preservar o passe máximo A contra o saque viagem.
 

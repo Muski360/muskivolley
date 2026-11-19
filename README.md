@@ -14,12 +14,14 @@ Abra o endereço mostrado pelo Vite. Informe seu nome, clique em **Jogar**, comp
 | Controle | Ação |
 | --- | --- |
 | Setas | Mover durante o rally |
-| `1`, `2`, `3` | Escolher saque Normal, Flutuante ou Viagem |
+| `1`, `2`, `3` | Escolher saque Normal, Flutuante ou Viagem. Você também pode clicar no tipo de saque durante sua vez. |
 | `Espaço` | Sacar, receber, levantar ou saltar para bloquear |
 | `S` na janela de levantamento | Largada quando o passe permitir |
 | `W`, `W` ou `W`, `S` no ar | Ataque forte ou shot |
 
 Em **Configurações**, ajuste volume, efeitos, movimento reduzido e textos de ação. Use **Tela cheia** no cabeçalho da arena para ampliar a quadra e `Esc` para voltar. A partida vai a pelo menos 15 pontos, com dois de vantagem.
+
+O anel de timing fica amarelo na janela do comando e verde na faixa ideal. Durante o saque normal, pressione `Espaço` quando estiver pronto. Para experimentar a recepção e os bloqueios, acompanhe a bola e as instruções da partida na lateral.
 
 ## Verificar
 

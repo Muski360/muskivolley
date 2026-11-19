@@ -247,6 +247,27 @@ h1 em span { color: #a57a43; }
 .text-button { margin-top: 13px; padding: 3px 0; border: 0; background: transparent; color: #e9e1bd; font-size: .76rem; text-decoration: underline; text-underline-offset: 3px; }
 .text-button:hover { color: #fff6db; }
 
+.serve-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.serve-options button {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  min-height: 48px;
+  padding: 5px 0;
+  border: 1px solid var(--forest-line);
+  background: var(--forest-deep);
+  color: var(--paper-light);
+  font: 700 .85rem/1 var(--display);
+}
+.serve-options button:hover { border-color: #ead092; }
+.serve-options button[aria-pressed="true"] {
+  border-color: #ead092;
+  background: #ead092;
+  color: #2d301c;
+}
+.serve-picker p { margin: 8px 0 0; font-size: .74rem; line-height: 1.35; }
+
 .roster { margin-top: 24px; }
 .roster-heading { display: flex; justify-content: space-between; padding: 0 0 9px; border-bottom: 1px solid var(--forest-line); color: #d2d5b8; }
 .scoreboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-block: 9px 7px; }
@@ -271,6 +292,51 @@ h1 em span { color: #a57a43; }
 .team li { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .team li.vacant { color: #b9c4a7; }
 .point-rule { margin: 4px 0 0; color: #d0d7ba; font-size: .68rem; }
+
+.bot-slot-controls { display: none; }
+.is-lobby .arena-sidebar { display: flex; justify-content: flex-start; gap: 0; min-width: 0; }
+.is-lobby .sidebar-top p { margin-bottom: 0; }
+.is-lobby .roster { margin-top: 17px; }
+.is-lobby .scoreboard { grid-template-columns: minmax(0, 1fr); gap: 7px; padding-bottom: 12px; }
+.is-lobby .team { padding: 0; border: 0; }
+.is-lobby .team-blue { padding-top: 7px; border-top: 1px solid var(--forest-line); }
+.is-lobby :is(.team strong, .point-rule) { display: none; }
+.is-lobby .team li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  min-height: 29px;
+  overflow: visible;
+}
+.is-lobby .bot-slot-controls { display: flex; align-items: center; gap: 4px; flex: none; }
+.bot-slot-controls :is(button, select) {
+  min-height: 25px;
+  padding: 3px 5px;
+  border: 1px solid #78866a;
+  border-radius: 0;
+  background: var(--forest-deep);
+  color: var(--paper-light);
+  font: 700 .66rem/1.2 var(--body);
+}
+.bot-slot-controls button:hover { border-color: #ead092; }
+.bot-slot-controls select { cursor: pointer; color-scheme: dark; }
+.bot-slot-controls .bot-remove { border-color: transparent; background: transparent; color: #efb697; }
+.buff-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 9px;
+  border: 1px solid var(--forest-line);
+  background: #172b21;
+  color: var(--paper-light);
+  font-size: .76rem;
+  cursor: pointer;
+}
+.buff-toggle small { display: block; margin-top: 2px; color: #d7d9bc; font-size: .65rem; }
+.buff-toggle input { margin: 0; inline-size: 16px; block-size: 16px; flex: none; accent-color: #e9cf91; }
+.sidebar-top .buff-status { margin: 9px 0 0; padding-left: 6px; border-left: 2px solid #ead092; color: #f9e6ad; font-size: .74rem; }
 
 .court { position: relative; align-self: stretch; display: grid; align-items: center; overflow: hidden; background: #183427; }
 #game-canvas {
@@ -326,7 +392,7 @@ h1 em span { color: #a57a43; }
   pointer-events: none;
 }
 
-.controls { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 8px 16px; border-top: 1px solid var(--forest-line); background: var(--forest-deep); }
+.controls { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: clamp(8px, 1vw, 14px); flex-wrap: wrap; padding: 8px 16px; border-top: 1px solid var(--forest-line); background: var(--forest-deep); }
 .controls-title { margin: 0; padding-right: 13px; border-right: 1px solid var(--forest-line); color: #e8d7a9; }
 .control { display: flex; align-items: center; gap: 8px; color: #f0e8c9; font-size: .72rem; font-weight: 500; white-space: nowrap; }
 .key-group { display: inline-flex; align-items: center; gap: 2px; }

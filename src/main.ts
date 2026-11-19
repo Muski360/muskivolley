@@ -5,9 +5,15 @@ import { mountUI } from './ui';
 
 const game = new Volleyball();
 const held = new Set<string>();
-const pressed = new Set<string>();
-const gameKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space', 'KeyW', 'KeyS', 'Digit1', 'Digit2', 'Digit3']);
+const taps: GameInput[] = [];
+const tapInputs = new Map<string, GameInput>([
+    ['Space', { space: true }], ['KeyW', { w: true }], ['KeyS', { s: true }],
+    ['Digit1', { serve: 1 }], ['Digit2', { serve: 2 }], ['Digit3', { serve: 3 }],
+]);
+const directionKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
+const simulationStep = 1 / 60;
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let accumulatedTime = 0;
 let effects = true;
 let textMode: 'animated' | 'static' | 'off' = 'animated';
 let volume = 0.35;
@@ -17,38 +23,44 @@ let lastCount: number | undefined;
 let lastView = '';
 
 const ui = mountUI({
-    start(name) {
-        held.clear();
-        pressed.clear();
-        game.start(name);
+    start(name, options) {
+        clearInputs();
+        accumulatedTime = 0;
+        game.start(name, options);
         if (typeof AudioContext !== 'undefined') {
             audio ??= new AudioContext();
             if (audio.state === 'suspended') void audio.resume().catch(() => {});
         }
     },
     reset() {
-        held.clear();
-        pressed.clear();
+        clearInputs();
+        accumulatedTime = 0;
         game.reset();
     },
+    chooseServe: serve => { taps.push({ serve }); },
     setEffects: enabled => { effects = enabled; },
     setTextMode: mode => { textMode = mode; },
     setVolume: value => { volume = value; },
 });
 
 window.addEventListener('keydown', event => {
-    if (!gameKeys.has(event.code) || game.state.phase === 'menu' || game.state.phase === 'finished') return;
+    if (game.state.phase === 'menu' || game.state.phase === 'finished') return;
+    const tap = tapInputs.get(event.code);
+    const direction = directionKeys.has(event.code);
+    if (!tap && !direction) return;
     if (document.querySelector('dialog[open]')) return;
     if (event.target instanceof HTMLElement && event.target.closest('input, select, textarea, button, a')) return;
     event.preventDefault();
-    held.add(event.code);
-    if (!event.repeat) pressed.add(event.code);
+    if (direction) held.add(event.code);
+    if (tap && !event.repeat) taps.push(tap);
 });
 window.addEventListener('keyup', event => held.delete(event.code));
-window.addEventListener('blur', () => {
+window.addEventListener('blur', clearInputs);
+
+function clearInputs() {
     held.clear();
-    pressed.clear();
-});
+    taps.length = 0;
+}
 
 function playTone(frequency: number, endFrequency: number, duration: number) {
     if (audio?.state !== 'running' || volume <= 0) return;
@@ -69,20 +81,23 @@ function playTone(frequency: number, endFrequency: number, duration: number) {
 function step(delta: number) {
     const state = game.state;
     if (document.querySelector('dialog[open]')) {
-        held.clear();
-        pressed.clear();
+        clearInputs();
+        accumulatedTime = 0;
     } else {
-        const input: GameInput = {
-            left: held.has('ArrowLeft'), right: held.has('ArrowRight'),
-            up: held.has('ArrowUp'), down: held.has('ArrowDown'),
-            space: pressed.has('Space'), w: pressed.has('KeyW'), s: pressed.has('KeyS'),
-            serve: pressed.has('Digit1') ? 1 : pressed.has('Digit2') ? 2 : pressed.has('Digit3') ? 3 : undefined,
-        };
-        game.step(delta, input);
-        pressed.clear();
+        accumulatedTime += delta;
+        while (accumulatedTime >= simulationStep) {
+            game.step(simulationStep, {
+                left: held.has('ArrowLeft'), right: held.has('ArrowRight'),
+                up: held.has('ArrowUp'), down: held.has('ArrowDown'),
+                ...taps.shift(),
+            });
+            accumulatedTime -= simulationStep;
+        }
     }
 
-    const view = [state.red, state.blue, state.phase, state.countdown, state.message, state.player].join('|');
+    const buff = state.players[0]?.buff;
+    const view = [state.red, state.blue, state.phase, state.countdown, state.message, state.player,
+        state.serve, state.server, state.buffsEnabled, buff?.kind, buff && Math.ceil(buff.remaining)].join('|');
     if (view !== lastView) {
         ui.update(state);
         lastView = view;
@@ -92,10 +107,11 @@ function step(delta: number) {
         else if (state.phase === 'serve') playTone(520, 825, 0.22);
         lastCount = state.countdown;
     }
-    if (state.feedback && state.feedback.id !== lastFeedback) {
-        if (state.feedback.text === '+1') playTone(520, 745, 0.25);
+    const feedback = state.feedback;
+    if (feedback && feedback.id > lastFeedback) {
+        if (feedback.text === '+1') playTone(520, 745, 0.25);
         else playTone(230, 115, 0.125);
-        lastFeedback = state.feedback.id;
+        lastFeedback = feedback.id;
     }
 }
 

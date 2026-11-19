@@ -9,7 +9,13 @@ export const VIEW_HEIGHT = 270;
 const FAR_Y = 133;
 const NEAR_Y = 246;
 const TEAM_COLORS = { red: 0xf64e37, blue: 0x429dff };
-const FEEDBACK_COLORS = { red: '#ff6048', blue: '#6ab3ff', green: '#a4f46c', teal: '#78f0d3', yellow: '#ffda60', neutral: '#fff2cc' };
+const FEEDBACK_COLORS = { red: '#ff6048', blue: '#6ab3ff', green: '#a4f46c', teal: '#78f0d3', yellow: '#ffda60', error: '#ff947d', neutral: '#fff2cc' };
+const PICKUP_COLORS = { pass: 0xefa6fa, speed: 0x82e7ef, jump: 0xffd36a };
+const PICKUP_MARKS = {
+    pass: ['.##......', '#..#...#.', '####..###', '#..#...#.', '#..#.....'],
+    speed: ['#...#..', '.#...#.', '..#...#', '.#...#.', '#...#..'],
+    jump: ['...#...', '..###..', '.#####.', '...#...', '...#...'],
+};
 const POSES = ['idle', 'strideA', 'strideB', 'jump', 'bump', 'set', 'spike', 'block'] as const;
 
 function project(x: number, y: number, z = 0) {
@@ -94,8 +100,8 @@ function poseFor(player: GameState['players'][number], time: number): AthletePos
         case 'move': return Math.floor(time / 108) % 2 === 0 ? 'strideA' : 'strideB';
         case 'receive': return 'bump';
         case 'set': return 'set';
-        case 'attack':
-        case 'serve': return 'spike';
+        case 'serve': return player.actionTime > 0.22 ? 'jump' : 'spike';
+        case 'attack': return 'spike';
         case 'block': return 'block';
         case 'jump': return 'jump';
         default: return player.z > 3 ? 'jump' : 'idle';
@@ -205,15 +211,37 @@ export class CourtScene extends Phaser.Scene {
         }
     }
 
+    private drawPickups(time: number, animated: boolean) {
+        for (const pickup of this.court.state.pickups) {
+            const position = project(pickup.x, pickup.y);
+            const x = Math.round(position.x);
+            const y = Math.round(position.y) - (animated ? Math.round(Math.sin(time / 280)) : 0);
+            const color = PICKUP_COLORS[pickup.kind];
+            this.ground.fillStyle(0x352e38, 0.29).fillEllipse(x, position.y + 2, 18, 7);
+            this.ground.fillStyle(0x202d31).fillCircle(x, y - 5, 8);
+            this.ground.lineStyle(1.2, color).strokeCircle(x, y - 5, 7.3);
+            this.ground.fillStyle(TEAM_COLORS[pickup.team]).fillRect(x - 1, y + 2, 3, 2);
+            this.ground.fillStyle(color);
+            const mark = PICKUP_MARKS[pickup.kind];
+            const left = x - Math.floor(mark[0].length / 2);
+            for (const [row, line] of mark.entries()) {
+                for (let column = 0; column < line.length; column++) {
+                    if (line[column] === '#') this.ground.fillRect(left + column, y - 7 + row, 1, 1);
+                }
+            }
+        }
+    }
+
     update(time: number, delta: number) {
         this.court.step(Math.min(delta, 50) / 1000);
         const { state } = this.court;
         this.ground.clear();
         this.air.clear();
+        const effects = this.court.effects();
 
-        if (this.court.effects()) {
+        if (effects) {
             this.cloudTime += delta;
-            this.clouds.x = Math.round(2 * Math.sin(this.cloudTime / 7000));
+            this.clouds.x = Math.round(2 * Math.sin(this.cloudTime / 3200));
             for (let i = 0; i < 9; i++) {
                 const x = ((i * 73 + time / (120 + i * 9)) % (VIEW_WIDTH + 12)) - 6;
                 const y = 27 + (i * 31) % 99 + Math.sin(time / 600 + i) * 4;
@@ -222,6 +250,7 @@ export class CourtScene extends Phaser.Scene {
             }
         }
 
+        this.drawPickups(time, effects);
         for (const [index, player] of state.players.entries()) {
             const ground = project(player.x, player.y);
             const position = project(player.x, player.y, player.z);
@@ -231,9 +260,15 @@ export class CourtScene extends Phaser.Scene {
                 this.ground.lineStyle(1.5, 0xfff1c2, 0.96).strokeEllipse(ground.x, ground.y, 23 * ground.scale, 9 * ground.scale);
                 this.ground.lineStyle(0.75, TEAM_COLORS.red, 0.9).strokeEllipse(ground.x, ground.y, 26 * ground.scale, 11 * ground.scale);
             }
+            if (player.buff) {
+                const width = 31 * ground.scale;
+                const height = 13 * ground.scale;
+                this.ground.lineStyle(3, 0x202d31, 0.9).strokeEllipse(ground.x, ground.y, width, height);
+                this.ground.lineStyle(1.5, PICKUP_COLORS[player.buff.kind]).strokeEllipse(ground.x, ground.y, width, height);
+            }
 
             const pose = poseFor(player, time);
-            const bob = pose === 'idle' && this.court.effects() ? Math.floor(Math.sin(time / 260 + index) + 0.6) : 0;
+            const bob = pose === 'idle' && effects ? Math.floor(Math.sin(time / 260 + index) + 0.6) : 0;
             sprite.setTexture(`athlete-${player.id}-${pose}`)
                 .setPosition(Math.round(position.x), Math.round(position.y - bob))
                 .setScale(position.scale)
@@ -255,12 +290,14 @@ export class CourtScene extends Phaser.Scene {
             .setDepth(state.ball.z >= COURT.netHeight ? 539 : 16 + state.ball.y)
             .setRotation(state.phase === 'rally' ? Math.floor(time / 85) * Math.PI / 4 : 0);
 
-        if (state.timing) {
-            const marker = project(state.timing.x, state.timing.y);
-            const progress = Phaser.Math.Clamp(state.timing.progress, 0, 1);
+        const timing = state.timing;
+        if (timing) {
+            const marker = project(timing.x, timing.y);
+            const progress = Phaser.Math.Clamp(timing.progress, 0, 1);
             const radius = 16 - progress * 10;
+            const color = timing.ideal ? 0xb7ff8c : timing.active ? 0xffdc76 : 0xfffcdb;
             this.ground.lineStyle(1, 0x453d36, 0.54).strokeEllipse(marker.x, marker.y, 15, 6);
-            this.ground.lineStyle(1.5, Math.abs(progress - 0.76) < 0.10 ? 0xb7ff8c : 0xfffcdb, 1)
+            this.ground.lineStyle(timing.active ? 2 : 1.5, color, 1)
                 .strokeEllipse(marker.x, marker.y, radius * 2, radius * 0.86);
         }
 
@@ -268,14 +305,17 @@ export class CourtScene extends Phaser.Scene {
     }
 
     private drawFeedback(time: number) {
-        const { feedback } = this.court.state;
+        const { feedbackEvents } = this.court.state;
         const mode = this.court.textMode();
-        if (feedback && feedback.id !== this.lastFeedback) {
+        for (const feedback of feedbackEvents) {
+            if (feedback.id <= this.lastFeedback) continue;
             this.lastFeedback = feedback.id;
             if (mode !== 'off') {
                 const p = project(feedback.x, feedback.y, feedback.z);
                 const y = Math.max(27, p.y - 17);
-                const label = this.add.text(p.x, y, feedback.text.toUpperCase(), {
+                const margin = Math.min(95, feedback.text.length * 3 + 6);
+                const x = Phaser.Math.Clamp(p.x, margin, VIEW_WIDTH - margin);
+                const label = this.add.text(x, y, feedback.text.toUpperCase(), {
                     fontFamily: 'monospace', fontSize: feedback.text === '+1' ? '18px' : '9px', fontStyle: 'bold',
                     color: FEEDBACK_COLORS[feedback.kind], stroke: '#26352d', strokeThickness: 2,
                 }).setOrigin(0.5).setDepth(600);
