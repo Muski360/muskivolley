@@ -145,7 +145,7 @@ test('os efeitos mudam o movimento, o salto e a recepção dentro dos limites da
 });
 
 test('o lobby mantém as escolhas e completa apenas as vagas livres', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     await page.getByRole('button', { name: 'Jogar', exact: true }).click();
     const start = page.getByRole('button', { name: 'Começar partida' });
     const fill = page.getByRole('button', { name: 'Completar com bots' });

@@ -4,7 +4,7 @@ import { Volleyball } from '../src/game';
 test('monta a sessão local, saca com o teclado e atualiza o placar', async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     const court = page.locator('#game-canvas canvas');
     await expect(court).toBeVisible();
     await expect(court).toHaveAttribute('width', '480');
@@ -29,7 +29,7 @@ test('monta a sessão local, saca com o teclado e atualiza o placar', async ({ p
 });
 
 test('mantém as preferências do menu ao recarregar', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     await page.getByRole('button', { name: 'Configurações' }).click();
     await page.getByLabel('Textos de ação').selectOption('off');
     await page.getByRole('button', { name: 'Fechar configurações' }).click();

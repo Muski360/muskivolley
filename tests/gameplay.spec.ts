@@ -238,7 +238,7 @@ test('15 a 14 mantém a partida, 16 a 14 encerra e a revanche reinicia com as me
 });
 
 test('a interface seleciona saque pelo botão e pelas teclas, e devolve o foco à quadra', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     await page.getByRole('button', { name: 'Jogar', exact: true }).click();
     await page.getByRole('button', { name: 'Completar com bots' }).click();
     await page.getByRole('button', { name: 'Começar partida' }).click();

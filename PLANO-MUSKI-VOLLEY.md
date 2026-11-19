@@ -1,63 +1,56 @@
 # Plano de desenvolvimento do Muski Volley
 
-**Etapa atual:** 2 — bots e buffs na quadra. **Status:** em implementação.
+**Etapa atual: 3. Formatos, bots e power-ups entregues, aguardando aceite.**
 
-A meta da versão 1.0 é um jogo de vôlei de praia 2×2 no navegador, com salas privadas pela internet, quatro vagas para humanos ou bots, gameplay baseado em timing, placar, reconexão e revanche. Use a [identidade visual](docs/identidade-visual.md), os [requisitos](docs/requisitos.md) e a [arquitetura](docs/arquitetura.md) como referência.
+O Muski Volley será um vôlei de praia arcade em 3D estilizado para navegador desktop. A versão 1.0 terá partidas 1v1, 2v2 e 3v3, treino com bots e salas privadas para até seis pessoas. A movimentação toma como referência o Vôlei Arcade. O timing e a sensação dos ataques partem de Spikair Volleyball. [Vôlei Arcade](https://voleyplay.vercel.app/) · [Spikair Volleyball](https://store.steampowered.com/app/1769270/Spikair_Volleyball/)
 
-## Como cada etapa é aprovada
+Consulte a [identidade visual](docs/identidade-visual.md), os [requisitos](docs/requisitos.md) e a [arquitetura](docs/arquitetura.md). A página inicial abre a quadra 3D. O treino anterior continua acessível em **Treino 2D**, como referência de placar, preferências, bots e power-ups.
 
-1. Implementar uma etapa por vez, rodar o build e os testes aplicáveis e entregar uma prévia com um roteiro curto de teste.
-2. Você testa e responde **OK** ou descreve o que quer mudar. Se pedir ajustes, a mesma etapa continua aberta até que você aprove a nova versão.
-3. Após seu **OK**, registrar a etapa como **Aprovada** e iniciar a próxima. Testes automatizados servem como evidência da entrega. A aprovação para avançar vem de você.
+## Como avançar
 
-Para abrir o jogo localmente, rode `npm ci` na primeira execução e `npm run dev`. Use `npm run build` e `npm test` para verificar o projeto. O [README](README.md) traz os controles e o preparo do Playwright.
+Cada etapa entrega uma prévia local, build, testes aplicáveis e um roteiro manual. Você testa e responde **OK** ou pede ajustes. Depois do **OK**, atualizar o status para **Aprovada** e só então iniciar a próxima etapa.
 
-## 0. Acabamento visual do MVP · Aprovada
+## 1. Protótipo 3D e mira · Concluída
 
-**Entrega.** Nuvens com deslocamento discreto, folhagem em primeiro plano sobre as linhas, nomes legíveis em qualquer escala da quadra e botão **Tela cheia** com acesso ao placar e aos controles. A opção de movimento reduzido deixa as nuvens paradas. A velocidade das nuvens foi aumentada após o primeiro teste.
+**Entrega.** A primeira quadra validou movimento, salto, mira no chão e duas câmeras com `N`. A física roda em passos de 60 Hz. O pedido para avançar à Etapa 2 incluiu a troca do estilo pixelado para melhorar a leitura.
 
-**Seu teste.** Observe o céu por alguns segundos, confira os nomes e as linhas nos cantos. Comece um treino, entre em tela cheia, saque com `Espaço` e volte pelo botão ou por `Esc`. Ative movimento reduzido em **Configurações** e observe o céu de novo.
+**Verificação.** Build concluído, 20 testes passaram e a mira foi conferida na mesma marca nas duas câmeras em Chromium.
 
-## 1. Gameplay completo no treino local · Aprovada
+## 2. Rally 1v1 e revisão visual · Concluída
 
-**Entrega.** Consolidar o motor de simulação de quadra, bola, saltos, rede e contatos com testes reproduzíveis. Completar os três saques, as quatro notas de recepção, o levantamento, a largada do levantador, os ataques `W, W` e `W, S` e os três resultados de bloqueio. Mostrar um sinal de timing, animação e feedback para cada ação. Fechar a regra de 15 pontos com dois de vantagem e a revanche local.
+**Entrega.** Quadra em 3D estilizado com resolução adaptada à janela e opção de tela cheia. Treino repetível de Saque, Manchete, Levantamento, Ataque e Bloqueio, além de partida 1v1 contra um bot com placar, contagem e revanche. A simulação inclui manchete, peixinho, levantamento, largada, três ataques, bloqueio e os três saques com mira e timing. No 1v1, o mesmo atleta pode dar os três toques.
 
-**Seu teste.** Jogue uma partida completa. Na sua vez de sacar, escolha **Normal**, **Flutuante** ou **Viagem**. Nos saques avançados, experimente apertar `Espaço` dentro e fora da janela amarela ou verde do anel. No rally, tente uma recepção boa e uma atrasada, alterne os ataques e experimente bloquear junto à rede. Confira se um passe B impede a largada do levantador. A partida segue em `15–14` e termina em `16–14`, cenário também coberto pelos testes automatizados.
+**Verificação.** Build concluído e 31 testes passaram. Em Chromium, a leitura da quadra e do HUD foi conferida nas duas câmeras e em tela cheia. A suíte também cobre a cravada com os dois botões do mouse, o saque com timing e a sequência de três toques.
 
-## 2. Bots e buffs na quadra · Em implementação
+**Ajustes pedidos antes de avançar.** Quadra ampliada de 8 × 16 m para 10 × 20 m, com faixa de areia maior e câmeras ajustadas. Manchete e levantamento ganharam altura, mantendo a largada com queda rápida. Os sete testes do rally passaram após os ajustes.
 
-**Entrega.** Criar perfis Fácil, Médio, Difícil e Brutal com diferenças de reação, posicionamento, decisão e timing. Adicionar, remover e configurar bots por equipe, além de preencher vagas livres com um botão. Implementar os buffs espelhados de passe, velocidade e salto, desligados por padrão e ajustáveis no lobby. Preservar o passe máximo A contra o saque viagem.
+**Seu teste · 5 minutos**
 
-**Seu teste.** Compare dois níveis em quadra, monte formações diferentes e experimente a partida com os buffs desligados e ligados. Confira se os perfis parecem distintos e se cada buff comunica seu efeito.
+1. Abra a quadra em tela cheia. Pressione `N` e confira se você distingue a bola, a mira e as linhas nas duas câmeras. Saia com `Esc`.
+2. No treino de Saque, lance e bata com dois cliques esquerdos. Troque o tipo de saque com `1`, `2` ou `3` e compare o timing e a trajetória.
+3. Use os exercícios para repetir manchete, levantamento e ataque. Compare os botões de ataque no ar e os dois juntos para a cravada. Tente largar com dois toques em `E` e bloquear segurando `Espaço` no salto.
+4. Inicie uma partida 1v1 e dispute um ponto contra o bot. Numa partida completa, confira a vitória por dois pontos de vantagem e a revanche.
 
-## 3. Salas privadas pela internet · Pendente
+## 3. 2v2, 3v3, bots e power-ups · Aguardando aceite
 
-**Entrega.** Criar o servidor Node.js com Colyseus e ligar **Criar sala** e **Entrar com código** ao lobby real. Sincronizar as quatro vagas, as equipes, os bots e as permissões do anfitrião. Incluir o botão de ocultar o código localmente e mensagens para sala inexistente, fechada ou cheia. Só o anfitrião pode iniciar com duas vagas ocupadas de cada lado.
+**Entrega.** Partidas locais em 1v1, 2v2 e 3v3 com rotação de saque, 2v2 como padrão e gestão de vagas no painel **Equipes e bônus**. Os bots Fácil, Médio, Difícil e Brutal distribuem cobertura, levantamento e ataque. Levantamentos em salto podem provocar um bloqueio antecipado. No 2v2 e no 3v3, os toques consecutivos alternam entre atletas, com a exceção do bloqueio. Os power-ups de passe, velocidade e salto são opcionais e aparecem espelhados.
 
-**Seu teste.** Crie uma sala em um navegador e entre em outro pelo código. Confira se ambos veem as mesmas equipes e bots, se o olho afeta só a sua tela e se o visitante fica sem o controle de iniciar.
+**Verificação.** Build concluído e 42 testes passaram. A simulação verificou alternância real de três toques em 2v2 e 3v3, níveis de bot, rotação do saque, duração dos bônus e revanche. Em Chromium, o início do 3v3 mostrou os seis atletas e os bônus nas duas câmeras.
 
-## 4. Partida online sincronizada · Pendente
+**Seu teste · 5 minutos**
 
-**Entrega.** Rodar a simulação no servidor e usar o mesmo núcleo de regras no treino. Sincronizar contagem, movimento, bola, contatos, timing, efeitos e placar. Implementar interpolação dos adversários e da bola, previsão e correção do movimento local e limites na compensação de latência. Validar comandos e permissões no servidor.
+1. Compare a altura da manchete e do levantamento pelos exercícios. Use `N` para conferir a bola e as linhas da quadra nas duas câmeras.
+2. Jogue alguns pontos no 2v2. Receba para o parceiro e acompanhe a alternância dos toques.
+3. Selecione 3v3. Em **Equipes e bônus**, altere o nível de um bot e ative os power-ups. Durante a partida, colete um bônus e acompanhe sua duração.
 
-**Seu teste.** Jogue com até quatro navegadores, primeiro na rede local e depois pela internet em uma prévia. Compare contagem, trajetória da bola, placar e resultado do ponto em duas telas. Jogue também com uma combinação de humanos e bots.
+## 4. Salas privadas online · Pendente
 
-## 5. Reconexão, anfitrião e revanche · Pendente
+**Entrega.** Integrar Colyseus para criar salas, entrar por código, configurar equipes e sincronizar bola, posições, timing, pontuação e efeitos. Permitir reconexão em até 30 segundos com substituição temporária por bot. A revanche começa após confirmação de todos os humanos presentes.
 
-**Entrega.** Preservar a identidade de cada vaga. Quando alguém cair, exibir um aviso e assumir a vaga com o bot previsto pelas regras. Se o jogador voltar em até 30 segundos, devolver o controle entre rallies. Transferir o anfitrião para o humano conectado há mais tempo e iniciar a revanche somente após a confirmação dos humanos presentes.
+**Seu teste.** Abra dois navegadores e compare a trajetória, os contatos e o placar. Preencha uma sala de seis vagas. Desconecte um humano, observe o bot assumir, retorne à mesma vaga e confirme a revanche nos dois navegadores.
 
-**Seu teste.** Derrube uma conexão durante o rally e observe a troca na outra tela. Volte dentro do tempo e confira a mesma vaga e o placar. Repita deixando o tempo expirar. Na revanche, confirme em uma tela por vez e veja se a contagem só inicia depois da última confirmação.
+## 5. Polimento e versão candidata · Pendente
 
-## 6. Balanceamento, desempenho e qualidade · Pendente
+**Entrega.** Finalizar arte, áudio e legibilidade das câmeras. Ajustar timing e bots com partidas reais, medir carregamento e desempenho, testar a sincronização sob latência e preparar uma versão candidata em HTTPS.
 
-**Entrega.** Ajustar ritmo, janelas de timing e bots com partidas reais. Revisar legibilidade, feedback, áudio, controle por teclado, configurações, tela cheia e movimento reduzido. Medir carregamento e fluidez em telas e máquinas diferentes. Rodar testes de regressão de regras, lobby, multiplayer, reconexão e permissões, incluindo partidas sob latência simulada.
-
-**Seu teste.** Faça uma sessão mais longa em tela cheia e em janela, com um adversário humano e bots de níveis diferentes. Avalie se o jogo comunica o que aconteceu, responde aos controles e mantém os resultados coerentes nos dois lados.
-
-## 7. Validação final e lançamento da versão 1.0 · Pendente
-
-**Entrega.** Publicar uma versão candidata em um ambiente de teste com HTTPS e conexão multiplayer segura. Verificar partidas completas com quatro humanos em redes distintas e com vagas preenchidas por bots. Preparar instruções para operar o serviço, acompanhar erros e retornar à versão anterior se necessário. Só promover a versão para lançamento após seu aceite da candidata.
-
-**Seu teste.** Compartilhe o link com seu grupo. Criem uma sala, completem uma partida e joguem a revanche. Testem também uma desconexão. Se o fluxo estiver pronto para uso, seu **OK** aprova o lançamento.
-
-Skins cosméticas, controles de toque e novas arenas ficam no roteiro pós-1.0. Cada atualização também pode seguir o mesmo ciclo de entrega, teste e aceite.
+**Seu teste.** Jogue partidas completas com seu grupo em redes diferentes, incluindo um 3v3, uma desconexão e uma revanche. A publicação depende da aprovação dessa versão candidata.

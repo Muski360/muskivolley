@@ -1,158 +1,130 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f2e8d3" />
-    <meta name="description" content="Treino de vôlei de praia 2 × 2 em pixel art no navegador." />
-    <link rel="icon" type="image/png" href="/assets/volley.png" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b2530" />
+    <meta name="description" content="Jogue vôlei de praia em 1v1, 2v2 ou 3v3 na Quadra do Mirante." />
+    <link rel="icon" href="/assets/volley.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800;1,900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/src/style.css" />
-    <title>Muski Volley | Vôlei de praia 2 × 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <title>Muski Volley · Quadra do Mirante</title>
   </head>
   <body>
-    <header class="topbar">
-      <div class="page-width topbar-inner">
-        <a class="brand" href="./" aria-label="Muski Volley, início" id="brand-link">
-          <span class="brand-mark" aria-hidden="true"><i></i></span>
-          <span>MUSKI <strong>VOLLEY</strong></span>
-        </a>
-        <button class="settings-button" id="open-settings" type="button"><span aria-hidden="true">⚙</span> Configurações</button>
-      </div>
-    </header>
+    <main>
+      <header class="masthead">
+        <h1>Muski <span>Volley</span></h1>
+        <a href="./treino-2d.html">Treino 2D</a>
+      </header>
 
-    <main class="page-width">
-      <section class="masthead" aria-labelledby="game-title">
-        <div>
-          <p class="eyebrow masthead-kicker"><span></span> Vôlei de praia arcade · 2 × 2</p>
-          <h1 id="game-title">MUSKI <em>VOLLEY<span>.</span></em></h1>
-        </div>
-        <div class="venue">
-          <span class="venue-icon" aria-hidden="true"><i></i></span>
-          <div><strong>Mirante da Costa</strong><small>Rio de Janeiro, Brasil</small></div>
-        </div>
-      </section>
+      <section class="arena" id="arena" aria-label="Quadra do Mirante">
+        <header class="arena-bar">
+          <h2>Quadra do Mirante</h2>
+          <div class="arena-actions">
+            <button type="button" id="camera" aria-keyshortcuts="N" disabled>
+              <span id="camera-label">Câmera de trás</span> <kbd>N</kbd>
+            </button>
+            <button type="button" id="fullscreen" aria-pressed="false">Tela cheia</button>
+          </div>
+        </header>
 
-      <section class="arena" id="game-arena" aria-label="Arena de treino">
-        <div class="arena-heading">
-          <span class="eyebrow"><span class="status-dot"></span> <span id="arena-mode">Treino local</span></span>
-          <span class="arena-separator"></span>
-          <span class="arena-status" id="match-status" aria-live="polite">Prévia da quadra</span>
-          <button class="fullscreen-button" id="fullscreen-button" type="button" aria-controls="game-arena">
-            <span aria-hidden="true">⛶</span><span id="fullscreen-label">Tela cheia</span>
-          </button>
-        </div>
-
-        <div class="arena-grid">
-          <aside class="arena-sidebar" aria-label="Sessão e equipes">
-            <div class="sidebar-top">
-              <form id="player-form">
-                <h2>Entrar em quadra</h2>
-                <p>Vôlei 2 × 2 com três bots.</p>
-                <label for="player-name">Seu nome</label>
-                <input id="player-name" maxlength="18" autocomplete="nickname" placeholder="Ex.: Muski" />
-                <button class="primary-button" type="submit"><span>Jogar</span><span aria-hidden="true">▶</span></button>
-              </form>
-
-              <div id="lobby-panel" hidden>
-                <h2>Sala de treino</h2>
-                <p>Monte as equipes e escolha a dificuldade dos bots.</p>
-              </div>
-
-              <div id="play-panel" hidden>
-                <h2>Partida de treino</h2>
-                <p id="phase-hint">Prepare-se para o primeiro saque.</p>
-                <div class="serve-picker" id="serve-picker" hidden>
-                  <div class="serve-options" role="group" aria-label="Tipo de saque">
-                    <button type="button" data-serve="1" aria-pressed="true" aria-keyshortcuts="1"><kbd aria-hidden="true">1</kbd> Normal</button>
-                    <button type="button" data-serve="2" aria-pressed="false" aria-keyshortcuts="2"><kbd aria-hidden="true">2</kbd> Flutuante</button>
-                    <button type="button" data-serve="3" aria-pressed="false" aria-keyshortcuts="3"><kbd aria-hidden="true">3</kbd> Viagem</button>
-                  </div>
-                  <p id="serve-tip">Saque seguro, com trajetória mais lenta.</p>
-                </div>
-                <p class="buff-status" id="buff-status" hidden></p>
-                <button class="text-button" data-home type="button">← Voltar ao início</button>
-              </div>
-
-              <div id="result-panel" hidden>
-                <h2 id="result-heading">Fim de jogo</h2>
-                <p id="result-description"></p>
-                <button class="primary-button" id="replay" type="button"><span>Jogar novamente</span><span aria-hidden="true">↻</span></button>
-                <button class="text-button" data-home type="button">← Voltar ao início</button>
-              </div>
-            </div>
-
-            <div class="roster">
-              <div class="roster-heading eyebrow"><span id="roster-label">Placar</span><span>2 × 2</span></div>
-              <div class="scoreboard">
-                <div class="team team-red">
-                  <h3><span></span> Equipe Vermelha</h3>
-                  <strong id="score-red">00</strong>
-                  <ul><li id="red-player">Você</li><li id="red-partner"><span class="bot-name">Vaga livre</span></li></ul>
-                </div>
-                <div class="team team-blue">
-                  <h3><span></span> Equipe Azul</h3>
-                  <strong id="score-blue">00</strong>
-                  <ul><li id="blue-player"><span class="bot-name">Vaga livre</span></li><li id="blue-partner"><span class="bot-name">Vaga livre</span></li></ul>
-                </div>
-              </div>
-              <p class="point-rule">15+ pontos · 2 de vantagem</p>
-            </div>
-            <div class="lobby-actions" id="lobby-actions" hidden>
-              <label for="buffs-enabled" class="buff-toggle">
-                <span><strong id="buffs-title">Buffs de quadra</strong><small id="buffs-description">Melhoram passe, velocidade ou salto.</small></span>
-                <input id="buffs-enabled" type="checkbox" aria-labelledby="buffs-title" aria-describedby="buffs-description" />
-              </label>
-              <button class="primary-button" id="fill-bots" type="button"><span>Completar com bots</span><span aria-hidden="true">+</span></button>
-              <button class="primary-button" id="start-match" type="button" hidden><span>Começar partida</span><span aria-hidden="true">▶</span></button>
-              <button class="text-button" data-home type="button">← Voltar</button>
-            </div>
-          </aside>
-
-          <div class="court" aria-label="Quadra de areia">
-            <div id="game-canvas" tabindex="-1" aria-label="Área do jogo"></div>
-            <div class="countdown" id="countdown" aria-hidden="true" hidden></div>
+        <div class="mode-bar">
+          <div class="match-options">
+            <label for="match-format">Formato</label>
+            <select id="match-format" disabled>
+              <option value="1">1v1</option>
+              <option value="2" selected>2v2</option>
+              <option value="3">3v3</option>
+            </select>
+            <button type="button" id="play-match" class="primary" disabled>Jogar 2v2</button>
+            <button type="button" id="open-setup" aria-haspopup="dialog" disabled>Equipes e bônus</button>
+            <span id="vacancy-note" hidden>Preencha as vagas para jogar.</span>
+          </div>
+          <div class="drill">
+            <label for="practice-scenario">Exercício</label>
+            <select id="practice-scenario" disabled>
+              <option value="serve">Saque</option>
+              <option value="receive">Manchete e peixinho</option>
+              <option value="set">Levantamento e largada</option>
+              <option value="attack">Ataque</option>
+              <option value="block">Bloqueio</option>
+            </select>
+            <button type="button" id="practice" disabled>Treinar</button>
+            <button type="button" id="restart-drill" aria-keyshortcuts="R" hidden>Repetir <kbd>R</kbd></button>
           </div>
         </div>
 
-        <div class="controls" aria-label="Controles de teclado">
-          <p class="eyebrow controls-title">Teclado</p>
-          <div class="control"><span class="key-group"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd></span><span>Movimento</span></div>
-          <div class="control"><kbd class="key-long">Espaço</kbd><span>Tocar / bloquear</span></div>
-          <div class="control"><span class="key-group"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></span><span>Tipo de saque</span></div>
-          <div class="control"><span class="key-group"><kbd>W</kbd><kbd>W</kbd> <span class="key-slash">/</span> <kbd>W</kbd><kbd>S</kbd></span><span>Ataque / shot</span></div>
-          <div class="control"><kbd>S</kbd><span>Largada</span></div>
+        <dialog id="match-setup" aria-labelledby="setup-title">
+          <form method="dialog">
+            <header class="setup-header">
+              <h3 id="setup-title">Equipes e bônus</h3>
+              <button type="submit" id="close-setup" autofocus>Fechar</button>
+            </header>
+            <div class="rosters">
+              <fieldset id="home-roster">
+                <legend>Time laranja</legend>
+                <p>Você</p>
+              </fieldset>
+              <fieldset id="away-roster">
+                <legend>Time azul</legend>
+              </fieldset>
+            </div>
+            <div class="setup-footer">
+              <label><input id="enable-buffs" type="checkbox" /> Ativar power-ups</label>
+              <button type="button" id="fill-bots">Completar com bots</button>
+            </div>
+          </form>
+        </dialog>
+
+        <div class="court-frame">
+          <div id="playfield" tabindex="0" role="region" aria-label="Quadra 3D" aria-describedby="controls" aria-busy="true">
+            <p id="loading" class="court-notice" role="status">Carregando a quadra…</p>
+            <div id="scoreboard" class="scoreboard" aria-label="Placar" hidden>
+              <span class="team team-home"><span id="team-home-name">Você</span> <strong id="score-player">0</strong></span>
+              <span class="score-divider">–</span>
+              <span class="team team-away"><strong id="score-opponent">0</strong> <span id="team-away-name">Bot</span></span>
+            </div>
+            <div id="countdown" class="countdown" hidden></div>
+            <div id="result" class="result" hidden>
+              <div>
+                <h3 id="result-label"></h3>
+                <button type="button" id="replay">Revanche</button>
+              </div>
+            </div>
+            <div class="serve-meter" id="serve-meter" hidden>
+              <span id="serve-cue">Tempo do saque</span>
+              <progress id="serve-progress" max="1" value="0" aria-label="Tempo do saque"></progress>
+              <div class="serve-track" aria-hidden="true"></div>
+            </div>
+          </div>
         </div>
+
+        <div class="match-strip" id="match-strip">
+          <p id="game-status" role="status">Escolha uma partida ou um exercício.</p>
+          <span id="touch-counter" hidden></span>
+          <span id="active-buff" hidden></span>
+          <span id="game-feedback" hidden></span>
+          <div id="serve-picker" class="serve-picker" aria-label="Tipo de saque" hidden>
+            <button type="button" data-serve="1" aria-pressed="true"><kbd>1</kbd> Normal</button>
+            <button type="button" data-serve="2" aria-pressed="false"><kbd>2</kbd> Flutuante</button>
+            <button type="button" data-serve="3" aria-pressed="false"><kbd>3</kbd> Viagem</button>
+          </div>
+        </div>
+
+        <details class="control-help" id="controls">
+          <summary>Controles</summary>
+          <div class="controls">
+            <span><kbd>WASD</kbd> Mover · <kbd>Mouse</kbd> Mirar</span>
+            <span><kbd>Espaço</kbd> Pular · segure para bloquear</span>
+            <span><kbd>Esq.</kbd> Segure para manchete · dois cliques no saque</span>
+            <span><kbd>Dir.</kbd> Peixinho no chão</span>
+            <span><kbd>E</kbd> Levantar · dois toques para largar</span>
+            <span>No ar, <kbd>Esq.</kbd> forte · <kbd>Dir.</kbd> leve · ambos cravada</span>
+          </div>
+        </details>
       </section>
     </main>
-
-    <dialog id="settings-dialog" aria-labelledby="settings-title">
-      <form method="dialog">
-        <div class="dialog-header"><h2 id="settings-title">Configurações</h2><button type="submit" aria-label="Fechar configurações">×</button></div>
-      </form>
-      <div class="setting">
-        <label for="text-mode">Textos de ação</label>
-        <select id="text-mode">
-          <option value="animated">Animados</option>
-          <option value="static">Estáticos</option>
-          <option value="off">Desligados</option>
-        </select>
-      </div>
-      <label class="setting checkbox-setting"><span>Movimento reduzido</span><input id="reduce-motion" type="checkbox" /></label>
-      <label class="setting checkbox-setting"><span>Efeitos da quadra</span><input id="effects-enabled" type="checkbox" checked /></label>
-      <label class="setting" id="volume-setting" hidden><span>Volume</span><input id="volume-control" type="range" min="0" max="100" value="55" /></label>
-    </dialog>
-
-    <template id="bot-slot-controls">
-      <div class="bot-slot-controls">
-        <button class="bot-add" type="button">Adicionar bot</button>
-        <select></select>
-        <button class="bot-remove" type="button">Remover</button>
-      </div>
-    </template>
-
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/arena3d/main.ts"></script>
   </body>
 </html>

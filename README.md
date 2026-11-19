@@ -1,6 +1,6 @@
 # Muski Volley
 
-Primeiro MVP visual de vôlei de praia arcade 2 × 2. Explore a quadra do Mirante da Costa e jogue um treino local contra bots.
+Vôlei de praia arcade em 3D estilizado. A Quadra do Mirante mede 10 × 20 m e tem treinos de fundamentos e partidas locais em 1v1, 2v2 e 3v3.
 
 ## Executar no navegador
 
@@ -9,7 +9,13 @@ npm ci
 npm run dev
 ```
 
-Abra o endereço mostrado pelo Vite. Informe seu nome, clique em **Jogar**, complete a sala com bots e comece a partida.
+Abra o endereço mostrado pelo Vite e escolha um formato ou um exercício. O 2v2 é o padrão. Em **Equipes e bônus**, ajuste a dificuldade de cada bot e ative os power-ups opcionais. Use `WASD` para correr, `Espaço` para pular, o mouse para mirar e `N` para alternar entre as câmeras. Para ampliar a quadra, selecione **Tela cheia** e volte com `Esc`.
+
+No saque, selecione Normal, Flutuante ou Viagem com `1`, `2` ou `3`. Clique com o botão esquerdo para lançar e clique de novo na janela indicada. No rally, segure o botão esquerdo para manchete. Use o clique direito no chão para dar um peixinho, `E` para levantar ou dois `E` rápidos para largar. No ar, o botão esquerdo dá um ataque forte, o direito dá um ataque menos potente e os dois juntos dão uma cravada. Perto da rede, pule e segure `Espaço` para bloquear.
+
+## Treino 2D
+
+Para jogar o treino anterior, use o link **Treino 2D** no topo da página inicial. Informe seu nome, clique em **Jogar**, complete a sala com bots e comece a partida.
 
 | Controle | Ação |
 | --- | --- |
@@ -27,13 +33,15 @@ O anel de timing fica amarelo na janela do comando e verde na faixa ideal. Duran
 
 ```sh
 npm run build
-npx playwright install chromium
+npx playwright install chromium --only-shell
 npm test
 ```
 
-O protótipo roda inteiramente no navegador. Ele usa uma dificuldade de bot e levantamento assistido. Salas online, reconexão, buffs e skins pertencem às próximas etapas.
+A quadra 3D precisa de WebGL 2. Veja o roteiro de teste da etapa atual no [plano de desenvolvimento](PLANO-MUSKI-VOLLEY.md).
 
 ## Arte
+
+A arena 3D usa geometria original criada em [scene.ts](src/arena3d/scene.ts). O treino 2D usa os assets abaixo.
 
 - [Mirante da Costa](public/assets/mirante.png). Cenário original criado com ImageGen e preparado em 480 × 270 pixels.
 - [Atletas](src/athletes.ts). Quatro personagens originais com oito poses. Rede, bola, marcações e efeitos são desenhados pelo jogo.

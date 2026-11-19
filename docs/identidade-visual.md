@@ -1,45 +1,23 @@
 # Identidade visual do Muski Volley
 
-## Quadra e câmera
+## Quadra do Mirante
 
-O Muski Volley tem visual arcade em pixel art 2.5D. A primeira quadra é de areia, em um mirante inspirado no litoral carioca. Mar azul, morros e vegetação tropical dão profundidade ao cenário. A referência visual orienta o enquadramento. A quadra, o cenário, os personagens e a interface terão arte original.
+O Muski Volley é um arcade de vôlei de praia em 3D estilizado, com formas limpas e cores de uma ilustração esportiva. A primeira quadra fica num mirante inspirado no litoral carioca. O mar, os morros e a vegetação enquadram a areia. Use menos contraste no cenário do que na quadra para que o olhar encontre a bola, a rede e os atletas.
 
-A câmera fica fixa e elevada, com a quadra inteira visível. A rede atravessa o centro da imagem e divide as equipes em esquerda e direita. O enquadramento usa uma base de **480 × 270** em **16:9**, com escala inteira quando couber e filtragem de pixels sem suavização. A interface mantém os textos legíveis separadamente da escala do cenário.
+A cena mantém a proporção **16:9**, com resolução adaptada à área disponível e contornos suavizados. A opção de tela cheia amplia a cena e mantém os controles essenciais visíveis. Os modelos originais preservam silhuetas distintas e poderão ser exportados em GLB na etapa de arte final.
 
-As nuvens se deslocam suavemente e ficam estáticas com movimento reduzido. A folhagem dos cantos fica em primeiro plano, acima das linhas quando houver sobreposição. O modo **Tela cheia** mantém o enquadramento 16:9 e deixa o placar e os controles acessíveis.
+## Referências pesquisadas
 
-## Cor e leitura da partida
+1. Em Nintendo Switch Sports, as linhas da quadra e as poses de cada fundamento ajudam a identificar a jogada. O Muski Volley aplica esse princípio com marcações firmes na areia e gestos distintos para os contatos. [Vôlei em Nintendo Switch Sports](https://www.nintendo.com/jp/switch/as8sa/volleyball/index.html)
+2. Super Mega Baseball 4 dá personalidade aos atletas por meio das proporções e dos uniformes. O Muski Volley usa silhuetas próprias e cores de equipe fáceis de distinguir à distância. [Super Mega Baseball 4](https://www.ea.com/games/super-mega-baseball/super-mega-baseball-4?setLocale=en-us)
 
-- **Cenário.** Areia dourada, oceano azul e vegetação verde compõem a paleta. Os detalhes do fundo ficam visualmente mais discretos que a bola, a rede e os jogadores.
-- **Equipes.** Uniformes vermelhos e azuis identificam os lados. O jogador também reconhece a equipe pelo nome no HUD e pela marcação junto aos personagens.
-- **Nomes em quadra.** Use texto nítido em HTML sobre a quadra, junto aos pés dos atletas, com fundo escuro e marcação na cor da equipe.
-- **Bola.** Contorno, sombra no chão e indicador de queda ajudam a distinguir altura, profundidade e ponto de chegada.
-- **HUD.** No canto superior esquerdo, duas colunas exibem **Equipe Vermelha** e **Equipe Azul**, o placar e os dois nomes de cada lado. A contagem `3 · 2 · 1` ocupa o centro antes do primeiro saque. Um aviso compacto informa desconexões sem bloquear a partida.
+A câmera de trás fica elevada e voltada para a rede, com o jogador próximo ao centro da metade inferior. A lateral abre a visão da quadra de 10 × 20 m. Nas duas, o enquadramento deixa espaço para os passes mais altos. As linhas da areia, as marcas de mira e a sombra da bola orientam a leitura de altura e profundidade. `N` troca a câmera instantaneamente.
 
-## Animações e textos de ação
+## Leitura da partida
 
-Cada saque, recepção, levantamento, ataque e bloqueio tem uma animação própria do personagem. A pose e o movimento deixam claro o que aconteceu, inclusive em golpes fracos e erros de timing. Um anel se fecha perto da bola ou do jogador para indicar o momento da ação. Ao resolver o lance, um texto curto salta perto de quem fez a jogada ou, no caso de um ponto, junto à equipe que marcou.
+- **Bola e mira.** A bola tem gomos contrastantes, sombra no chão e indicação de queda na versão com partidas. A mira usa um anel no ponto correspondente ao cursor.
+- **Atletas e equipes.** Uniformes vermelhos e azuis, acompanhados de nomes e marcas de equipe. A silhueta deixa claras as poses de saque, manchete, peixinho, levantamento, ataque e bloqueio.
+- **HUD.** O placar, a contagem e o estado da partida ficam em HTML. Textos e controles não dependem da resolução interna da cena.
+- **Ações.** Mostrar avisos compactos de timing e resultado, incluindo **A+**, **A**, **B**, **Erro**, **Largada**, **Cravada** e **Bloqueio**. Em **Textos de ação**, o jogador escolhe apresentação animada, estática ou desligada. Movimento reduzido usa o modo estático para os textos animados.
 
-| Ação | Feedback na quadra |
-| --- | --- |
-| Saque | **Normal**, **Flutuante** ou **Viagem**. Quando o saque falhar, **Erro de saque**. |
-| Recepção | **A+** em verde, **A** em turquesa, **B** em amarelo e **Erro** em coral. |
-| Levantamento e ataque | **Levantamento**, **Levantamento perfeito**, **Ataque forte**, **Shot**, **Ataque fraco** ou **Largada**, conforme o lance. |
-| Bloqueio | **Amorteceu**, **Bloqueio** ou **Explorou o bloqueio**, conforme o contato. |
-| Ponto | **+1** em vermelho para a Equipe Vermelha e em azul para a Equipe Azul. |
-
-Use contorno para separar o texto da areia e do cenário. Posicione o texto de modo que a bola, o anel de timing e o HUD permaneçam visíveis. O menu **Textos de ação** controla a apresentação.
-
-| Modo | Comportamento |
-| --- | --- |
-| **Animados** | Padrão. O texto sobe brevemente e desaparece. |
-| **Estáticos** | O texto aparece pelo mesmo intervalo, sem deslocamento. O modo de movimento reduzido aplica essa apresentação quando **Animados** estiver selecionado. |
-| **Desligados** | Oculta os textos de ação, incluindo **+1**. |
-
-As animações dos personagens, o anel de timing e o placar permanecem visíveis em todos os modos.
-
-## Skins futuras
-
-Uma atualização futura permitirá escolher skins para o jogador. As variações serão cosméticas e preservarão a silhueta, a identificação da equipe e os tempos das animações. A primeira versão usa os uniformes padrão.
-
-Consulte os [requisitos](requisitos.md) e a [arquitetura](arquitetura.md) para as regras e a origem do feedback visual.
+O [plano de desenvolvimento](../PLANO-MUSKI-VOLLEY.md) indica quais recursos já estão em teste.

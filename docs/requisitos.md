@@ -1,63 +1,35 @@
 # Requisitos do Muski Volley
 
-O jogo é um vôlei de praia arcade 2x2 no navegador. As partidas usam teclado no desktop e acomodam até quatro pessoas, com bots nas vagas que o anfitrião preencher.
+Vôlei de praia arcade 3D para navegador desktop, com teclado e mouse. A quadra mede 10 × 20 m e tem faixa de areia fora das linhas para salvar a bola. A versão 1.0 oferece treino com bots e salas privadas em 1v1, 2v2 e 3v3.
 
-## Tela inicial e lobby
+## Controles e fundamentos
 
-1. A tela inicial permite escolher o nome de exibição, abrir **Configurações** e selecionar **Jogar**.
-2. **Jogar** oferece **Criar sala** e **Entrar com código**. Quem cria entra sozinho como anfitrião. Quem recebe um convite informa o código para entrar na sala privada.
-3. O código fica no topo do lobby. O botão com ícone de olho oculta ou revela o código somente naquele navegador, para que a pessoa possa protegê-lo durante uma transmissão.
-4. O HUD no canto superior esquerdo mostra placar, equipes e os dois lugares de cada lado, identificando jogadores, bots e vagas livres.
-5. **Configurações** oferece volume, qualidade dos efeitos, movimento reduzido e **Textos de ação**. As escolhas são locais. Os textos começam em **Animados**. Com movimento reduzido, a opção **Animados** usa a apresentação estática. Consulte a [identidade visual](identidade-visual.md#animações-e-textos-de-ação).
-
-## Equipes e bots
-
-Cada equipe tem duas vagas. O anfitrião pode adicionar, remover e mudar a dificuldade dos bots de cada lado. **Completar com bots** preenche todas as vagas livres com bots **Médios** e preserva os ocupantes atuais. Só o anfitrião vê **Começar partida**. O servidor exige duas vagas ocupadas de cada lado para iniciar a contagem.
-
-| Dificuldade | Comportamento esperado |
+| Comando | Regra |
 | --- | --- |
-| **Fácil** | Reage mais devagar, cobre menos espaço e prefere golpes seguros, com maior variação de timing. |
-| **Médio** | Cobre a posição esperada e alterna jogadas simples com tentativas de golpes mais difíceis. |
-| **Difícil** | Antecipa melhor a trajetória, se posiciona mais cedo e executa ações de timing exigente com mais frequência. |
-| **Brutal** | Tem a reação e o timing mais precisos e escolhe golpes de acordo com o espaço deixado pela defesa. |
+| `WASD`, mouse e `N` | Mover em relação à câmera pelo próprio lado, incluindo fora das linhas. A rede separa os lados. O cursor marca um alvo na areia. `N` alterna entre a câmera elevada de trás e a lateral. O cursor fica livre nas duas. Use **Tela cheia** para ampliar a quadra e `Esc` para voltar. |
+| `Espaço` | Um toque pula quando o atleta estiver no chão, inclusive no saque. Segurar no ar perto da rede, contra bola adversária, ativa o bloqueio. |
+| Mouse no chão | Segurar o botão esquerdo prepara a manchete. O passe acontece quando a bola entra no alcance, seguindo a mira no contato. O clique direito inicia o peixinho na direção da mira e amplia o alcance para bolas baixas. |
+| `E` | Um toque prepara o levantamento na mira. O levantamento em salto pode enganar bots no bloqueio. Dois toques em até 180 ms, antes do contato, preparam a largada. Pode mirar em qualquer ponto. A queda rápida pode fazer uma largada de longe bater na rede ou cair do próprio lado. |
+| Mouse no ar | Esquerdo dá ataque forte, direito dá ataque menos potente. Os dois em até 70 ms armam a cravada. No contato aéreo, a cravada exige altura, proximidade da rede e timing mais preciso. Uma bola alcançável, mas ruim para cravar, bate no meio da rede. Sem alcance, o golpe passa no vazio. |
+| Saque | `1`, `2` e `3` selecionam Normal, Flutuante e Viagem. O primeiro clique esquerdo lança a bola. O segundo golpeia no timing e usa a mira daquele instante. |
 
-Todos os perfis seguem as mesmas regras de movimento, alcance e timing dos humanos. Os parâmetros de reação, posicionamento, escolha de golpes e precisão de cada perfil serão ajustados em playtests.
+Resolva cada contato uma única vez. Um segundo clique ou `E` precisa chegar antes do contato para mudar o golpe armado. O jogo sinaliza a janela do saque e os resultados dos contatos. As demais janelas de timing, alcances e velocidades serão ajustadas na Etapa 2 com treino e testes reproduzíveis.
 
-## Partida, desconexão e revanche
+A posição e a altura do contato definem a nota da manchete enquanto o botão estiver segurado. A manchete e o levantamento sobem para dar tempo de chegar ao próximo toque. A largada continua com queda rápida. O flutuante alterna a direção no trecho adversário. O viagem chega mais rápido e limita a nota do passe a **A**. Após um bloqueio válido de cravada, a bola cai do lado atacante sem chance de cobertura. Ataques comuns permitem a defesa de bolas desviadas pelo bloqueio.
 
-- **Início e vitória.** Uma contagem estilizada de três segundos antecede o primeiro saque. Cada rally vale um ponto. Vence a equipe com pelo menos 15 pontos e dois de vantagem, sem teto adicional. De `14–14`, o placar `15–14` mantém a partida e `16–14` encerra.
-- **Desconexão.** Durante a partida, um aviso identifica quem saiu e um bot assume imediatamente a mesma vaga. O substituto usa a dificuldade de um bot da própria equipe, se houver, ou de um bot adversário. Na ausência de outro bot, usa **Médio**. Quem reconectar em até 30 segundos reassume a vaga entre rallies.
-- **Sucessão do anfitrião.** Se o anfitrião sair, o humano conectado há mais tempo assume suas permissões.
-- **Revanche.** Na tela de resultado, cada humano presente pode clicar em **Jogar novamente**. Os bots confirmam automaticamente. Quando todos os humanos presentes confirmarem, o placar zera e começa uma nova contagem de três segundos com as mesmas equipes e vagas.
+## Partida e formatos
 
-## Controles e funções
+- A escolha de 1v1, 2v2 ou 3v3 ocorre antes do início. 2v2 é o padrão. Todos podem receber, levantar, atacar e bloquear. Cada equipe tem até três toques, contando o bloqueio. Apenas no 1v1 um atleta pode fazer sozinho a sequência completa. Nos demais formatos, os toques alternam entre atletas, com exceção de quem acabou de bloquear.
+- Cada rally vale um ponto. A partida começa após uma contagem de três segundos. Vence a equipe com 15 ou mais pontos e dois de vantagem. A revanche reinicia com o mesmo formato e as mesmas vagas.
+- Os níveis de bot são Fácil, Médio, Difícil e Brutal. Reação, posicionamento, timing e escolha de golpe distinguem cada nível. Bots seguem as mesmas regras de movimento e alcance dos humanos. **Completar com bots** preenche vagas livres com bots Médios.
+- Power-ups de passe, velocidade e salto começam desligados. O anfitrião pode ativar coletas espelhadas. Cada efeito dura seis segundos de bola em jogo. O de passe melhora a nota da recepção válida, respeitando o máximo **A** contra viagem.
 
-| Comando | Uso |
-| --- | --- |
-| Setas | Movimento em quatro direções na quadra. |
-| `1`, `2`, `3` | Selecionar saque Normal, Flutuante ou Viagem, respectivamente. |
-| `Espaço` | Confirmar o saque, receber, levantar ou saltar para bloquear, conforme a fase e a posição. |
-| `S` na janela do levantador | Largar a bola quando a qualidade do passe permitir. |
-| `W, W` ou `W, S` na janela aérea do atacante | Executar um ataque forte ou um shot, respectivamente. |
+## Sala e preferências
 
-As funções mudam por rally. Qualquer jogador pode receber, o parceiro assume o levantamento com salto automático e quem recebeu volta para atacar. Os dois jogadores podem bloquear quando estiverem perto da rede.
+O anfitrião escolhe o formato, preenche vagas com humanos ou bots e inicia quando todas estiverem ocupadas. O código de convite pode ser ocultado localmente. Na desconexão durante uma partida, um bot assume a vaga. Reconectar em até 30 segundos devolve o controle entre rallies. Se o anfitrião sair, o humano conectado há mais tempo assume suas permissões. A revanche espera a confirmação de todos os humanos presentes.
 
-## Fundamentos e timing
+Nome de exibição, volume, efeitos, movimento reduzido e textos de ação são preferências locais. A [identidade visual](identidade-visual.md) especifica o feedback.
 
-| Fundamento | Regra |
-| --- | --- |
-| **Saque normal** | Cruza a rede com trajetória lenta quando executado. |
-| **Saque flutuante** | Exige mais precisão e pode falhar. A janela de recepção adversária é menor. |
-| **Saque viagem** | Tem a maior dificuldade de execução, a menor janela de recepção e limita o passe adversário a **A**. |
-| **Recepção** | A bola precisa estar ao alcance do jogador. A proximidade do comando com o instante ideal produz **A+**, **A**, **B** ou **Erro**. **A+** facilita a largada do levantador e torna perfeito o levantamento executado. **A** permite a largada com timing mais apertado e favorece bolas de boa qualidade. **B** impede a largada do levantador. No **Erro**, a bola pode desviar ou cair. |
-| **Levantamento** | O levantador salta automaticamente. A janela do levantamento é ampla e o comando na faixa ideal produz uma bola perfeita. |
-| **Ataque** | O atacante sobe para o contato. Na janela aérea, `W, W` dá potência e `W, S` produz um shot. Sem comando, o contato ao alcance gera um ataque fraco. Um levantamento perfeito dificulta a recepção e o bloqueio. |
-| **Bloqueio** | Saltar com `Espaço` perto da rede e no momento correto pode amortecer a bola para a defesa, devolver diretamente o ataque ou desviar para fora e dar o ponto à equipe atacante. |
+## Treino e partida local
 
-Cada ação tem animação e texto de resultado conforme a [identidade visual](identidade-visual.md#animações-e-textos-de-ação). As janelas de timing são valores de balanceamento a validar em playtests.
-
-## Buffs de quadra
-
-O anfitrião pode ligar ou desligar os buffs no lobby. Eles começam desligados. Quando ativos, aparecem oportunidades espelhadas de coleta para os dois lados. Os efeitos temporários melhoram a velocidade, a altura de salto ou a qualidade do passe. O buff de passe concede **A+** em recepções válidas. Contra o saque viagem, o limite de **A** prevalece. A duração dos buffs será ajustada em playtests.
-
-A primeira versão terá uma quadra e controles de teclado no desktop. Controles de toque e seleção de skins ficam para atualizações futuras.
+A página inicial oferece exercícios repetíveis de Saque, Manchete, Levantamento, Ataque e Bloqueio. Cada partida local tem um humano e bots nas outras vagas do formato escolhido. O painel **Equipes e bônus** permite abrir vagas, preencher as vagas livres e configurar cada bot. A partida começa com contagem e oferece revanche com as mesmas equipes e opções.

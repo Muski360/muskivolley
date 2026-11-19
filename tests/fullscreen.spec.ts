@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('a partida aceita o saque em tela cheia e a interface acompanha a saída nativa', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     await page.getByRole('button', { name: 'Jogar', exact: true }).click();
     await page.getByRole('button', { name: 'Completar com bots' }).click();
     await page.getByRole('button', { name: 'Começar partida' }).click();
@@ -28,7 +28,7 @@ test('a arena preenche a janela quando a tela cheia não está disponível', asy
     await page.addInitScript(() => {
         Object.defineProperty(document, 'fullscreenEnabled', { value: false });
     });
-    await page.goto('/');
+    await page.goto('/treino-2d.html');
     const arena = page.locator('#game-arena');
 
     await page.getByRole('button', { name: 'Tela cheia', exact: true }).click();
