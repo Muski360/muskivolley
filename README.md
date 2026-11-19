@@ -19,7 +19,7 @@ Abra o endereço mostrado pelo Vite. Informe seu nome, clique em **Jogar**, comp
 | `S` na janela de levantamento | Largada quando o passe permitir |
 | `W`, `W` ou `W`, `S` no ar | Ataque forte ou shot |
 
-Em **Configurações**, ajuste volume, efeitos, movimento reduzido e textos de ação. A partida vai a pelo menos 15 pontos, com dois de vantagem.
+Em **Configurações**, ajuste volume, efeitos, movimento reduzido e textos de ação. Use **Tela cheia** no cabeçalho da arena para ampliar a quadra e `Esc` para voltar. A partida vai a pelo menos 15 pontos, com dois de vantagem.
 
 ## Verificar
 
@@ -44,3 +44,5 @@ O protótipo roda inteiramente no navegador. Ele usa uma dificuldade de bot e le
 </details>
 
 Consulte a [identidade visual](docs/identidade-visual.md), os [requisitos](docs/requisitos.md) e a [arquitetura](docs/arquitetura.md) para o escopo completo.
+
+O [plano de desenvolvimento](PLANO-MUSKI-VOLLEY.md) indica o que testar em cada etapa e qual é a entrega atual.

@@ -213,7 +213,7 @@ export class CourtScene extends Phaser.Scene {
 
         if (this.court.effects()) {
             this.cloudTime += delta;
-            this.clouds.x = 2 * Math.sin(this.cloudTime / 7000);
+            this.clouds.x = Math.round(2 * Math.sin(this.cloudTime / 7000));
             for (let i = 0; i < 9; i++) {
                 const x = ((i * 73 + time / (120 + i * 9)) % (VIEW_WIDTH + 12)) - 6;
                 const y = 27 + (i * 31) % 99 + Math.sin(time / 600 + i) * 4;
